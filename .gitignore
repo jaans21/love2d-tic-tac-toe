@@ -1,0 +1,154 @@
+# LÖVE2D Tic-Tac-Toe .gitignore
+
+# ===========================================
+# Operating System Files
+# ===========================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ===========================================
+# Development Tools
+# ===========================================
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# IntelliJ IDEA / JetBrains
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ===========================================
+# LÖVE2D Specific
+# ===========================================
+
+# LÖVE2D builds and packages
+*.love
+*.exe
+*.app
+*.deb
+*.rpm
+*.dmg
+*.pkg
+
+# LÖVE2D temporary files
+love-*
+build/
+dist/
+releases/
+
+# ===========================================
+# Logs and Temporary Files
+# ===========================================
+
+# Log files
+*.log
+logs/
+log/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.swp
+*.swo
+
+# Cache files
+cache/
+*.cache
+
+# ===========================================
+# Documentation Build Files
+# ===========================================
+
+# Generated documentation
+docs/_build/
+docs/build/
+*.pdf
+*.epub
+
+# ===========================================
+# Archive Files
+# ===========================================
+
+*.zip
+*.tar
+*.tar.gz
+*.tar.bz2
+*.rar
+*.7z
+
+# ===========================================
+# Personal/Local Files
+# ===========================================
+
+# Personal notes
+notes.txt
+TODO.personal
+*.personal
+
+# Local configuration
+config.local.*
+settings.local.*
+
+# Test files
+test_*
+scratch.*
+
+# ===========================================
+# Git and Version Control
+# ===========================================
+
+# Git conflicts
+*.orig
+
+# Patches
+*.patch
+*.diff
