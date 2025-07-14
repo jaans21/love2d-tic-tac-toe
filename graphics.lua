@@ -20,6 +20,25 @@ function graphics.init()
     graphics.largeFont = love.graphics.newFont(config.graphics.fonts.large)
 end
 
+function graphics.updateFontsForSize()
+    if not graphics.gameState then return end
+    
+    local scale = config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)
+    
+    -- Update fonts with responsive sizes
+    local titleSize = math.max(24, math.floor(config.graphics.fonts.title * scale))
+    local normalSize = math.max(14, math.floor(config.graphics.fonts.normal * scale))
+    local buttonSize = math.max(12, math.floor(config.graphics.fonts.button * scale))
+    local smallSize = math.max(10, math.floor(config.graphics.fonts.small * scale))
+    local largeSize = math.max(18, math.floor(config.graphics.fonts.large * scale))
+    
+    graphics.titleFont = love.graphics.newFont(titleSize)
+    graphics.font = love.graphics.newFont(normalSize)
+    graphics.buttonFont = love.graphics.newFont(buttonSize)
+    graphics.smallFont = love.graphics.newFont(smallSize)
+    graphics.largeFont = love.graphics.newFont(largeSize)
+end
+
 function graphics.setup(gameState, theme, menu, particles, transitions)
     graphics.gameState = gameState
     graphics.theme = theme
@@ -83,61 +102,79 @@ end
 function graphics.drawTitleWithGlow()
     love.graphics.setFont(graphics.titleFont)
     
+    -- Calculate responsive positions
+    local scale = config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)
+    local titleY = math.max(20, config.ui.titleY * scale)
+    local subtitleY = math.max(60, config.ui.subtitleY * scale)
+    
     -- Skip glow effect if animations are suspended
     if not graphics.gameState.suspendAnimations then
         -- Title shadow/glow using config shadow offset
         for i = 1, 3 do
             love.graphics.setColor(graphics.theme.colors.accent[1], graphics.theme.colors.accent[2], graphics.theme.colors.accent[3], 0.3 - i * 0.1)
-            love.graphics.printf("TIC-TAC-TOE", -i, config.ui.titleY - i, graphics.gameState.windowWidth, "center")
-            love.graphics.printf("TIC-TAC-TOE", i, config.ui.titleY + i, graphics.gameState.windowWidth, "center")
+            love.graphics.printf("TIC-TAC-TOE", -i, titleY - i, graphics.gameState.windowWidth, "center")
+            love.graphics.printf("TIC-TAC-TOE", i, titleY + i, graphics.gameState.windowWidth, "center")
         end
     end
     
     -- Main title (always draw)
     love.graphics.setColor(graphics.theme.colors.text)
-    love.graphics.printf("TIC-TAC-TOE", 0, config.ui.titleY, graphics.gameState.windowWidth, "center")
+    love.graphics.printf("TIC-TAC-TOE", 0, titleY, graphics.gameState.windowWidth, "center")
     
     -- Subtitle with accent
     love.graphics.setFont(graphics.font)
     love.graphics.setColor(graphics.theme.colors.accent)
-    love.graphics.printf("Made by jaans21", 0, config.ui.subtitleY, graphics.gameState.windowWidth, "center")
+    love.graphics.printf("Made by jaans21", 0, subtitleY, graphics.gameState.windowWidth, "center")
 end
 
 function graphics.drawGameModeSection()
     -- Section title
     love.graphics.setFont(graphics.largeFont)
     love.graphics.setColor(graphics.theme.colors.text)
-    love.graphics.printf("Game Mode", 0, config.ui.gameModeY, graphics.gameState.windowWidth, "center")
+    
+    -- Calculate responsive positions
+    local scale = config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)
+    local gameModeY = math.max(120, config.ui.gameModeY * scale)
+    local gameModeButtonsY = math.max(150, config.ui.gameModeButtonsY * scale)
+    
+    love.graphics.printf("Game Mode", 0, gameModeY, graphics.gameState.windowWidth, "center")
     
     -- Mode buttons using responsive card width
-    local cardWidth = config.getResponsiveCardWidth(graphics.gameState.windowWidth)
-    local startX = graphics.gameState.windowWidth/2 - cardWidth - 10
-    local y = config.ui.gameModeButtonsY
+    local cardWidth = math.max(120, config.ui.cardWidth * scale)
+    local spacing = math.max(10, 20 * scale)
+    local startX = graphics.gameState.windowWidth/2 - cardWidth - spacing/2
     
-    graphics.drawModernButton(graphics.menu.menuButtons[2], startX, y, 2)
-    graphics.drawModernButton(graphics.menu.menuButtons[3], startX + cardWidth + 20, y, 3)
+    graphics.drawModernButton(graphics.menu.menuButtons[2], startX, gameModeButtonsY, 2)
+    graphics.drawModernButton(graphics.menu.menuButtons[3], startX + cardWidth + spacing, gameModeButtonsY, 3)
 end
 
 function graphics.drawBoardSizeSection()
     -- Section title
     love.graphics.setFont(graphics.largeFont)
     love.graphics.setColor(graphics.theme.colors.text)
-    love.graphics.printf("Board Size", 0, config.ui.boardSizeY, graphics.gameState.windowWidth, "center")
+    
+    -- Calculate responsive positions
+    local scale = config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)
+    local boardSizeY = math.max(200, config.ui.boardSizeY * scale)
+    local boardSizeButtonsY1 = math.max(230, config.ui.boardSizeButtonsY1 * scale)
+    local boardSizeButtonsY2 = math.max(290, config.ui.boardSizeButtonsY2 * scale)
+    
+    love.graphics.printf("Board Size", 0, boardSizeY, graphics.gameState.windowWidth, "center")
     
     -- Size buttons in grid using responsive card width
-    local cardWidth = config.getResponsiveCardWidth(graphics.gameState.windowWidth)
-    local cardHeight = config.ui.cardHeight
-    local startX = graphics.gameState.windowWidth/2 - cardWidth - 10
-    local y1 = config.ui.boardSizeButtonsY1
-    local y2 = config.ui.boardSizeButtonsY2
+    local cardWidth = math.max(120, config.ui.cardWidth * scale)
+    local cardHeight = math.max(40, config.ui.cardHeight * scale)
+    local spacing = math.max(10, 20 * scale)
+    local startX = graphics.gameState.windowWidth/2 - cardWidth - spacing/2
     
-    graphics.drawModernButton(graphics.menu.menuButtons[4], startX, y1, 4)
-    graphics.drawModernButton(graphics.menu.menuButtons[5], startX + cardWidth + 20, y1, 5)
-    graphics.drawModernButton(graphics.menu.menuButtons[6], startX, y2, 6)
-    graphics.drawModernButton(graphics.menu.menuButtons[7], startX + cardWidth + 20, y2, 7)
+    graphics.drawModernButton(graphics.menu.menuButtons[4], startX, boardSizeButtonsY1, 4)
+    graphics.drawModernButton(graphics.menu.menuButtons[5], startX + cardWidth + spacing, boardSizeButtonsY1, 5)
+    graphics.drawModernButton(graphics.menu.menuButtons[6], startX, boardSizeButtonsY2, 6)
+    graphics.drawModernButton(graphics.menu.menuButtons[7], startX + cardWidth + spacing, boardSizeButtonsY2, 7)
     
     -- Start Game button (centered)
-    local startGameY = y2 + cardHeight + config.ui.padding
+    local padding = math.max(15, config.ui.padding * scale)
+    local startGameY = boardSizeButtonsY2 + cardHeight + padding
     local startGameX = graphics.gameState.windowWidth/2 - cardWidth/2
     graphics.drawModernButton(graphics.menu.menuButtons[1], startGameX, startGameY, 1)
     
@@ -149,29 +186,32 @@ function graphics.drawBoardSizeSection()
     -- Audio controls section
     love.graphics.setFont(graphics.largeFont)
     love.graphics.setColor(graphics.theme.colors.text)
-    local audioSectionY = config.calculateAudioSectionY(graphics.gameState.isCustomSizeMode)
+    
+    local audioSectionY = startGameY + cardHeight + padding * 2
+    if graphics.gameState.isCustomSizeMode then
+        audioSectionY = audioSectionY + 60  -- Add space for custom input
+    end
+    
     love.graphics.printf("Settings", 0, audioSectionY, graphics.gameState.windowWidth, "center")
     
     -- First row: Sound and Music buttons
-    local audioButtonY = audioSectionY + config.ui.sectionSpacing
-    local soundButtonX = graphics.gameState.windowWidth/2 - cardWidth - 10
-    local musicButtonX = graphics.gameState.windowWidth/2 + 10
+    local sectionSpacing = math.max(30, config.ui.sectionSpacing * scale)
+    local buttonSpacing = math.max(10, config.ui.buttonSpacing * scale)
+    local audioButtonY = audioSectionY + sectionSpacing
+    local soundButtonX = graphics.gameState.windowWidth/2 - cardWidth - buttonSpacing/2
+    local musicButtonX = graphics.gameState.windowWidth/2 + buttonSpacing/2
     
     graphics.drawModernButton(graphics.menu.menuButtons[8], soundButtonX, audioButtonY, 8)
     graphics.drawModernButton(graphics.menu.menuButtons[9], musicButtonX, audioButtonY, 9)
     
     -- Second row: AI Level and AI Speed buttons
-    local secondRowY = audioButtonY + cardHeight + config.ui.buttonSpacing
-    local aiLevelButtonX = graphics.gameState.windowWidth/2 - cardWidth - 10
-    local aiSpeedButtonX = graphics.gameState.windowWidth/2 + 10
-    
-    graphics.drawModernButton(graphics.menu.menuButtons[12], aiLevelButtonX, secondRowY, 12)
-    graphics.drawModernButton(graphics.menu.menuButtons[11], aiSpeedButtonX, secondRowY, 11)
+    local secondRowY = audioButtonY + cardHeight + buttonSpacing
+    graphics.drawModernButton(graphics.menu.menuButtons[12], soundButtonX, secondRowY, 12)
+    graphics.drawModernButton(graphics.menu.menuButtons[11], musicButtonX, secondRowY, 11)
     
     -- Third row: Fullscreen button (centered)
-    local thirdRowY = secondRowY + cardHeight + config.ui.buttonSpacing
+    local thirdRowY = secondRowY + cardHeight + buttonSpacing
     local fullscreenButtonX = graphics.gameState.windowWidth/2 - cardWidth/2
-    
     graphics.drawModernButton(graphics.menu.menuButtons[10], fullscreenButtonX, thirdRowY, 10)
 end
 
@@ -201,7 +241,11 @@ function graphics.drawModernButton(button, x, y, index)
     if not button then return end
     
     local anim = graphics.particles.buttonAnimations[index] or {scale = 1, hover = 0, glow = 0}
-    local w, h = config.getResponsiveCardWidth(graphics.gameState.windowWidth), config.ui.cardHeight
+    
+    -- Calculate responsive dimensions
+    local scale = config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)
+    local w = math.max(100, config.ui.cardWidth * scale)
+    local h = math.max(35, config.ui.cardHeight * scale)
     
     -- Get button text (could be a function)
     local buttonText = button.text
@@ -392,20 +436,24 @@ function graphics.drawCustomSizeInput()
 end
 
 function graphics.drawGame()
-    -- Game information
+    -- Game information with responsive positioning
     love.graphics.setColor(graphics.theme.colors.text)
     love.graphics.setFont(graphics.font)
     
+    local scale = config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)
+    local topMargin = math.max(10, 20 * scale)
+    local infoSpacing = math.max(20, 30 * scale)
+    
     local modeText = graphics.gameState.gameMode == "human" and "Human vs Human" or "Human vs AI"
-    love.graphics.printf(modeText, 0, 20, graphics.gameState.windowWidth, "center")
+    love.graphics.printf(modeText, 0, topMargin, graphics.gameState.windowWidth, "center")
     
     if not graphics.gameState.gameOver then
         if graphics.gameState.aiThinkingTime > 0 then
             love.graphics.setColor(graphics.theme.colors.playerO)
-            love.graphics.printf("AI thinking...", 0, 50, graphics.gameState.windowWidth, "center")
+            love.graphics.printf("AI thinking...", 0, topMargin + infoSpacing, graphics.gameState.windowWidth, "center")
         else
             local playerText = graphics.gameState.currentPlayer == 1 and "Turn: X" or "Turn: O"
-            love.graphics.printf(playerText, 0, 50, graphics.gameState.windowWidth, "center")
+            love.graphics.printf(playerText, 0, topMargin + infoSpacing, graphics.gameState.windowWidth, "center")
         end
     end
     
@@ -418,17 +466,20 @@ function graphics.drawGame()
     -- Draw victory particles
     graphics.drawVictoryParticles()
     
-    -- Back to menu button using modern style
-    -- Use the same coordinates as in menu.updateGameButtonPositions
-    local menuButtonX = 20
-    local menuButtonY = graphics.gameState.windowHeight - 60
+    -- Back to menu button using responsive sizing
+    local buttonWidth = math.max(80, 120 * scale)
+    local buttonHeight = math.max(30, 40 * scale)
+    local margin = math.max(10, 20 * scale)
+    
+    local menuButtonX = margin
+    local menuButtonY = graphics.gameState.windowHeight - buttonHeight - margin
     
     -- Update button coordinates before drawing to ensure consistency
     if graphics.menu.gameButtons[1] then
         graphics.menu.gameButtons[1].x = menuButtonX
         graphics.menu.gameButtons[1].y = menuButtonY
-        graphics.menu.gameButtons[1].w = 120
-        graphics.menu.gameButtons[1].h = 40
+        graphics.menu.gameButtons[1].w = buttonWidth
+        graphics.menu.gameButtons[1].h = buttonHeight
     end
     
     graphics.drawGameButton(graphics.menu.gameButtons[1], menuButtonX, menuButtonY, 1)
@@ -455,7 +506,12 @@ function graphics.drawBoard()
 end
 
 function graphics.drawPieces()
-    love.graphics.setLineWidth(config.graphics.lineWidths.piece)
+    -- Make line width responsive - slightly thicker on smaller screens for better visibility
+    local baseLineWidth = config.graphics.lineWidths.piece
+    if config.isSmallScreen(graphics.gameState.windowWidth, graphics.gameState.windowHeight) then
+        baseLineWidth = baseLineWidth + 1
+    end
+    love.graphics.setLineWidth(baseLineWidth)
     
     for i = 1, graphics.gameState.boardSize do
         for j = 1, graphics.gameState.boardSize do
@@ -543,9 +599,12 @@ function graphics.drawGameOver()
     love.graphics.setColor(0, 0, 0, 0.7)
     love.graphics.rectangle("fill", 0, 0, graphics.gameState.windowWidth, graphics.gameState.windowHeight)
     
-    -- Game over message
+    -- Game over message with responsive positioning
     love.graphics.setColor(graphics.theme.colors.text)
     love.graphics.setFont(graphics.titleFont)
+    
+    local scale = config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)
+    local messageOffset = math.max(60, 100 * scale)
     
     local message = ""
     if graphics.gameState.winner == 1 then
@@ -559,14 +618,33 @@ function graphics.drawGameOver()
         love.graphics.setColor(graphics.theme.colors.tie)
     end
     
-    love.graphics.printf(message, 0, graphics.gameState.windowHeight/2 - 100, graphics.gameState.windowWidth, "center")
+    love.graphics.printf(message, 0, graphics.gameState.windowHeight/2 - messageOffset, graphics.gameState.windowWidth, "center")
     
-    -- Buttons
-    local buttonX = graphics.gameState.windowWidth/2 - 100
-    local playAgainY = graphics.gameState.windowHeight/2
-    local mainMenuY = graphics.gameState.windowHeight/2 + 70
+    -- Buttons with responsive sizing
+    local buttonWidth = math.max(120, 200 * scale)
+    local buttonHeight = math.max(40, 50 * scale)
+    local buttonSpacing = math.max(40, 70 * scale)
     
-    -- Draw Game Over buttons using the same modern style as menu buttons
+    local buttonX = graphics.gameState.windowWidth/2 - buttonWidth/2
+    local playAgainY = graphics.gameState.windowHeight/2 - 10
+    local mainMenuY = playAgainY + buttonHeight + math.max(10, 20 * scale)
+    
+    -- Update button coordinates for proper mouse detection
+    if graphics.menu.gameOverButtons[1] then
+        graphics.menu.gameOverButtons[1].x = buttonX
+        graphics.menu.gameOverButtons[1].y = playAgainY
+        graphics.menu.gameOverButtons[1].w = buttonWidth
+        graphics.menu.gameOverButtons[1].h = buttonHeight
+    end
+    
+    if graphics.menu.gameOverButtons[2] then
+        graphics.menu.gameOverButtons[2].x = buttonX
+        graphics.menu.gameOverButtons[2].y = mainMenuY
+        graphics.menu.gameOverButtons[2].w = buttonWidth
+        graphics.menu.gameOverButtons[2].h = buttonHeight
+    end
+    
+    -- Draw Game Over buttons
     graphics.drawGameOverButton(graphics.menu.gameOverButtons[1], buttonX, playAgainY, 1)
     graphics.drawGameOverButton(graphics.menu.gameOverButtons[2], buttonX, mainMenuY, 2)
 end
@@ -616,9 +694,13 @@ function graphics.drawVictoryParticles()
 end
 
 function graphics.drawThemeButton()
-    local buttonSize = config.ui.themeButtonSize
-    local x = graphics.gameState.windowWidth - buttonSize - config.ui.themeButtonMargin
-    local y = config.ui.themeButtonMargin
+    -- Make theme button responsive
+    local scale = config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)
+    local buttonSize = math.max(30, config.ui.themeButtonSize * scale)
+    local margin = math.max(15, config.ui.themeButtonMargin * scale)
+    
+    local x = graphics.gameState.windowWidth - buttonSize - margin
+    local y = margin
     
     -- Button background with hover effect
     local hoverFactor = graphics.theme.themeButtonHover
@@ -670,7 +752,10 @@ function graphics.drawGameOverButton(button, x, y, index)
     if not button then return end
     
     local anim = graphics.particles.gameOverButtonAnimations[index] or {scale = 1, hover = 0, glow = 0}
-    local w, h = 200, 50  -- Game Over button dimensions
+    
+    -- Use button dimensions if they exist, otherwise use responsive defaults
+    local w = button.w or (math.max(120, 200 * config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)))
+    local h = button.h or (math.max(40, 50 * config.getScale(graphics.gameState.windowWidth, graphics.gameState.windowHeight)))
     
     -- Get button text
     local buttonText = button.text

@@ -355,4 +355,22 @@ function config.autoDetectPerformance()
     end
 end
 
+-- Simple responsive helper functions
+function config.getScale(windowWidth, windowHeight)
+    -- Calculate a simple scale based on window size
+    local baseWidth = 1200
+    local baseHeight = 900
+    local scaleX = windowWidth / baseWidth
+    local scaleY = windowHeight / baseHeight
+    return math.min(scaleX, scaleY, 1.2) -- Cap at 1.2x scale
+end
+
+function config.isSmallScreen(windowWidth, windowHeight)
+    return windowWidth < 900 or windowHeight < 650
+end
+
+function config.isTinyScreen(windowWidth, windowHeight)
+    return windowWidth < 800 or windowHeight < 600
+end
+
 return config

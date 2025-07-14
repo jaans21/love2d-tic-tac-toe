@@ -115,6 +115,11 @@ function input.resize(w, h)
     input.gameState.windowWidth = w
     input.gameState.windowHeight = h
     
+    -- Update fonts for new size
+    if graphics and graphics.updateFontsForSize then
+        graphics.updateFontsForSize()
+    end
+    
     -- Recalculate board layout if in game
     if input.gameState.current == "playing" or input.gameState.current == "gameOver" then
         input.gameState.calculateBoardLayout()

@@ -122,10 +122,36 @@ function gameState.syncPieceAnimations()
 end
 
 function gameState.calculateBoardLayout()
-    local maxBoardSize = math.min(gameState.windowWidth * 0.7, gameState.windowHeight * 0.8)
-    gameState.cellSize = maxBoardSize / gameState.boardSize
-    gameState.boardOffsetX = (gameState.windowWidth - gameState.cellSize * gameState.boardSize) / 2
-    gameState.boardOffsetY = (gameState.windowHeight - gameState.cellSize * gameState.boardSize) / 2 + 20
+    local config = require("settings")
+    
+    -- Adjust board size based on screen size
+    local boardPercentage = 0.7
+    local verticalPercentage = 0.8
+    
+    if config.isTinyScreen(gameState.windowWidth, gameState.windowHeight) then
+        boardPercentage = 0.85  -- Use more space on tiny screens
+        verticalPercentage = 0.75
+    elseif config.isSmallScreen(gameState.windowWidth, gameState.windowHeight) then
+        boardPercentage = 0.8   -- Use more space on small screens
+        verticalPercentage = 0.75
+    end
+    
+    local maxBoardSize = math.min(
+        gameState.windowWidth * boardPercentage, 
+        gameState.windowHeight * verticalPercentage
+    )
+    
+    -- Ensure minimum cell size for usability
+    local minCellSize = config.isTinyScreen(gameState.windowWidth, gameState.windowHeight) and 25 or 30
+    gameState.cellSize = math.max(minCellSize, maxBoardSize / gameState.boardSize)
+    
+    -- Center the board
+    local actualBoardSize = gameState.cellSize * gameState.boardSize
+    gameState.boardOffsetX = (gameState.windowWidth - actualBoardSize) / 2
+    
+    -- Adjust vertical offset based on screen size
+    local verticalOffset = config.isTinyScreen(gameState.windowWidth, gameState.windowHeight) and 10 or 20
+    gameState.boardOffsetY = (gameState.windowHeight - actualBoardSize) / 2 + verticalOffset
 end
 
 function gameState.startGame()

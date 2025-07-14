@@ -1,5 +1,6 @@
 -- Tic-Tac-Toe Game in Lua with LÖVE2D (Modular Version)
 -- Made by jaans21
+-- Features responsive design that adapts to different screen sizes
 
 -- Import all modules
 local gameState = require("game_state")
@@ -87,9 +88,15 @@ function love.update(dt)
     
     -- Theme button hover detection
     local mx, my = love.mouse.getPosition()
-    local themeButtonSize = 40
-    local themeButtonX = gameState.windowWidth - themeButtonSize - 20
-    local themeButtonY = 20
+    local config = require("settings")
+    
+    -- Make theme button detection responsive
+    local scale = config.getScale(gameState.windowWidth, gameState.windowHeight)
+    local themeButtonSize = math.max(30, config.ui.themeButtonSize * scale)
+    local themeButtonMargin = math.max(15, config.ui.themeButtonMargin * scale)
+    
+    local themeButtonX = gameState.windowWidth - themeButtonSize - themeButtonMargin
+    local themeButtonY = themeButtonMargin
     
     local isThemeHovered = mx >= themeButtonX and mx <= themeButtonX + themeButtonSize and
                           my >= themeButtonY and my <= themeButtonY + themeButtonSize

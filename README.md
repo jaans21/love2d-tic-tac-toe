@@ -5,10 +5,11 @@ A modern Tic-Tac-Toe game with graphical interface developed in Lua using the LÃ
 ## Features
 
 - **Modern graphical interface** with colors and visual effects
+- **Responsive design** that adapts to different screen sizes and window resolutions
 - **Smooth screen transitions** with fade, slide, and zoom effects
 - **Integrated sound system** with sound effects for all interactions
 - **Optional background music** with independent audio controls
-- **Fullscreen support** and window resizing
+- **Fullscreen support** and window resizing with automatic UI adaptation
 - **Visual animations**:
   - Smooth piece scaling when placed
   - Animated highlight for winning line
@@ -26,6 +27,7 @@ A modern Tic-Tac-Toe game with graphical interface developed in Lua using the LÃ
 - **Interactive menu** with mouse navigation
 - **Intuitive controls**
 - **Sound effects** for clicks, moves, victories, and ties
+- **Cross-platform compatibility** with automatic scaling for different devices
 
 ## Requirements
 
