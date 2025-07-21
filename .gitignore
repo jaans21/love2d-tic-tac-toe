@@ -77,6 +77,10 @@ tramp
 *.dmg
 *.pkg
 
+# Exception: Include our game executables
+!tic-tac-toe-windows.exe
+!tic-tac-toe-linux
+
 # LÖVE2D temporary files
 love-*
 build/
