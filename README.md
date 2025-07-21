@@ -29,30 +29,28 @@ A modern Tic-Tac-Toe game with graphical interface developed in Lua using the L�
 - **Sound effects** for clicks, moves, victories, and ties
 - **Cross-platform compatibility** with automatic scaling for different devices
 
-## Requirements
+## Download & Run
 
-- **LÖVE2D** (Love2D) version 11.4 or higher
-- Operating system: Windows, macOS, or Linux
+### Standalone Executables (Recommended)
+No installation required! Just download and run:
 
-## Installation
+- **Linux**: `tic-tac-toe-linux` 
+  ```bash
+  ./tic-tac-toe-linux
+  ```
 
-1. **Download LÖVE2D**:
-   - Visit: https://love2d.org/
-   - Download the appropriate version for your operating system
-   - Install LÖVE2D following the instructions
+- **Windows**: `tic-tac-toe-windows.exe`
+  - Double-click to run
 
-2. **Run the game**:
-   - **Method 1**: Drag the game folder onto the LÖVE2D executable
-   - **Method 2**: From command line:
-     ```bash
-     love .
-     ```
-   - **Method 3**: On Windows, you can create a .bat file:
-     ```batch
-     @echo off
-     "C:\Program Files\LOVE\love.exe" .
-     pause
-     ```
+### System Requirements
+- **Linux**: Any modern distribution with X11/Wayland support
+- **Windows**: Windows 7 or later (64-bit)
+- **Graphics**: OpenGL 2.1+ support
+
+### Alternative: Run from Source
+If you prefer to run from source code:
+1. Install LÖVE2D from https://love2d.org/
+2. Run: `love .` in the project directory
 
 ## How to Play
 
